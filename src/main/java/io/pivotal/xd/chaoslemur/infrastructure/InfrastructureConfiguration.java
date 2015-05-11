@@ -21,10 +21,13 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ServiceInstance;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,6 +43,26 @@ class InfrastructureConfiguration {
                         @Value("${aws.secretAccessKey}") String secretAccessKey) {
         return new AmazonEC2Client(new BasicAWSCredentials(accessKeyId, secretAccessKey));
     }
+    
+    @Autowired
+    DirectorUtils directorUtils;
+    
+    @Bean
+    @ConditionalOnProperty("jclouds.endpoint")
+    Infrastructure jcloudsInfra(
+    		@Value("${jclouds.endpoint}") String endpoint,
+            @Value("${jclouds.tenant}") String tenant,    		
+    		@Value("${jclouds.username}") String username,
+            @Value("${jclouds.password}") String password,
+            @Value("${jclouds.proxyhost}") String proxyhost,
+            @Value("${jclouds.proxyport}") String proxyport
+            ) {
+    	
+        return new JCloudsComputeInfrastructure(this.directorUtils,endpoint,tenant, username,password,proxyhost,proxyport);
+    }
+    
+    
+    
 
     @Bean
     @ConditionalOnBean(AmazonEC2.class)
