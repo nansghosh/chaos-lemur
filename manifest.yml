@@ -1,7 +1,27 @@
 ---
 applications:
 - name: chaos-lemur
-  memory: 512M
+  memory: 1024M
   instances: 1
-  path: target/chaos-lemur.jar
-  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  host: chaos-lemur
+  domain: cf.ns.lz-paas.itn.ftgroup
+  timeout: 160
+  env:
+    DEFAULT_PROBABILITY: "0.1"
+    DOCKER_PROBABILITY: "0"
+    LOGSEARCH_PROBABILITY: "0"
+    MESOS_PROBABILITY: "0"
+    MONGO_DOCKER_PROBABILITY: "0"
+    SCHEDULE: "0 0/01 * * * *"
+    director_username: "chaos"
+    # jclouds_proxyhost: "elpaaso-fpv-intranet.internal.paas"
+    jclouds_tenant: "IST_CF_tenant_1"
+    jclouds_username: "guillaume.berche@orange.com"
+    director_port: "5555"
+    BLACKLIST: "ha_proxy_z1/0,postgres_z1/0,nfs_z1/0,cf-rabbitmq,docker,mongo-docker,api/0,elasticsearch_persistent/0"
+    DRYRUN: "true"
+    director_host: "10.236.242.71"
+    director_password: "lemur"
+    jclouds_endpoint: "http://openwatt-lodz.itn.ftgroup:5000/v2.0/"
+    jclouds_password: "elpaaso2015"
+    jclouds_proxyport: "3128"

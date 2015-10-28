@@ -49,6 +49,9 @@ final class JCloudsComputeInfrastructure extends AbstractDirectorUtilsInfrastruc
         String provider = "openstack-nova";
         String identity = tenant+":"+username; // tenantName:userName
         String credential = password;
+        
+        
+        logger.debug("logging as {}",identity);
 
         novaApi = ContextBuilder.newBuilder(provider)
                 .endpoint(endpoint)
@@ -67,18 +70,10 @@ final class JCloudsComputeInfrastructure extends AbstractDirectorUtilsInfrastruc
         	ServerApi serverApi = novaApi.getServerApi(regions.iterator().next()); //FIXME: multi az ?
         	logger.debug("found member {}",vmId);
         	serverApi.stop(vmId);
+        	//serverApi.delete(vmId);
         } catch (Exception e) {
             throw new DestructionException(String.format("Unable to destroy %s", member), e);
         }
     }
 
-//    
-//    private void handleTask(Task task) throws DestructionException, InterruptedException, RemoteException {
-//        task.waitForTask();
-//
-//        TaskInfo taskInfo = task.getTaskInfo();
-//        if (TaskInfoState.error == taskInfo.getState()) {
-//            throw new DestructionException(taskInfo.getError().getLocalizedMessage());
-//        }
-//    }
 }

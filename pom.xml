@@ -108,6 +108,12 @@
 		</dependency>
         
         
+		<dependency>
+		  <groupId>org.ow2.sirocco.vmware.vcloud</groupId>
+		  <artifactId>vcloud-java-sdk</artifactId>
+		  <version>1.5.0</version>
+		</dependency>        
+        
     </dependencies>
 
     <build>
